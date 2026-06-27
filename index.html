@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terraforming Mars Elite - Ultra Update 5.1 Fixed</title>
+    <title>Terraforming Mars Elite - Ultra Update 5.2 Balanced</title>
     <style>
         body { 
             margin: 0; 
@@ -114,12 +114,12 @@
             <div class="progress-bar" id="progressBar"></div>
             <div class="progress-text" id="progressText">Придатність: 0%</div>
         </div>
-        <button class="btn" id="upg1" onclick="buyUpgrade(1)" disabled><span id="upg1-text">🧲 Магнітний щит</span><span class="cost" id="cost1">15 BTU</span></button>
-        <button class="btn" id="upg2" onclick="buyUpgrade(2)" disabled><span>🏭 <span id="upg2-text">Фаб-заводы атмосфери</span></span><span class="cost" id="cost2">50 BTU</span></button>
-        <button class="btn" id="upg3" onclick="buyUpgrade(3)" disabled><span id="upg3-text">🌱 Посів земного моху</span><span class="cost" id="cost3">150 BTU</span></button>
-        <button class="btn" id="upg4" onclick="buyUpgrade(4)" disabled><span id="upg4-text">🌊 Доставка крижаних комет</span><span class="cost" id="cost4">500 BTU</span></button>
-        <button class="btn" id="upg5" onclick="buyUpgrade(5)" disabled><span id="upg5-text">🛰️ Орбітальні дзеркала</span><span class="cost" id="cost5">2000 BTU</span></button>
-        <button class="btn" id="upg6" onclick="buyUpgrade(6)" disabled><span id="upg6-text">🧬 Біокуполи ШІ</span><span class="cost" id="cost6">10000 BTU</span></button>
+        <button class="btn" id="upg1" onclick="buyUpgrade(1)" disabled><span id="upg1-text">🧲 Магнітний щит</span><span class="cost" id="cost1">25 BTU</span></button>
+        <button class="btn" id="upg2" onclick="buyUpgrade(2)" disabled><span>🏭 <span id="upg2-text">Фаб-заводы атмосфери</span></span><span class="cost" id="cost2">100 BTU</span></button>
+        <button class="btn" id="upg3" onclick="buyUpgrade(3)" disabled><span id="upg3-text">🌱 Посів земного моху</span><span class="cost" id="cost3">400 BTU</span></button>
+        <button class="btn" id="upg4" onclick="buyUpgrade(4)" disabled><span id="upg4-text">🌊 Доставка крижаних комет</span><span class="cost" id="cost4">1500 BTU</span></button>
+        <button class="btn" id="upg5" onclick="buyUpgrade(5)" disabled><span id="upg5-text">🛰️ Орбітальні дзеркала</span><span class="cost" id="cost5">6000 BTU</span></button>
+        <button class="btn" id="upg6" onclick="buyUpgrade(6)" disabled><span id="upg6-text">🧬 Біокуполи ШІ</span><span class="cost" id="cost6">25000 BTU</span></button>
         <center><button class="reset-btn" id="reset-text" onclick="resetGame()">Почати заново 🔄</button></center>
     </div>
         <script>
@@ -128,13 +128,13 @@
                 title: "Тераформування Марса", progress: "Придатність", done: "Марс повністю тераформовано! 🌍",
                 upg1: "🧲 Магнітний щит", upg2: "Фаб-заводи атмосфери", upg3: "🌱 Посів земного моху",
                 upg4: "🌊 Доставка крижаних комет", upg5: "🛰️ Орбітальні дзеркала", upg6: "🧬 Біокуполи ШІ",
-                reset: "Почати заново 🔄", confirm: "Скинути прогрес?", lvl: "РІВЕНЬ", taps: "кліків"
+                reset: "Почати заново 🔄", confirm: "Скинути прогрес для нового балансу?", lvl: "РІВЕНЬ", taps: "кліків"
             },
             en: {
                 title: "Terraforming Mars", progress: "Habitability", done: "Mars fully Terraformed! 🌍",
                 upg1: "🧲 Magnetic Shield", upg2: "Atmosphere Factories", upg3: "🌱 Earth Moss Seeding",
                 upg4: "🌊 Ice Comet Delivery", upg5: "🛰️ Orbital Mirrors", upg6: "🧬 AI Biospheres",
-                reset: "Reset Game 🔄", confirm: "Reset progress?", lvl: "LEVEL", taps: "taps"
+                reset: "Reset Game 🔄", confirm: "Reset progress for the new balance?", lvl: "LEVEL", taps: "taps"
             },
             es: {
                 title: "Terraformación de Marte", progress: "Habitabilidad", done: "¡Marte terraformado! 🌍",
@@ -159,11 +159,10 @@
         let totalTaps = Number(localStorage.getItem('m_total_taps')) || 0;
         let playerLvl = Number(localStorage.getItem('m_player_lvl')) || 1;
 
-        // Базові дефолтні ціни для ВСІХ 6 кнопок
-        let defaultCosts = { 1: 15, 2: 50, 3: 150, 4: 500, 5: 2000, 6: 10000 };
+        // Нові збалансовані початкові ціни
+        let defaultCosts = { 1: 25, 2: 100, 3: 400, 4: 1500, 5: 6000, 6: 25000 };
         let upgCosts = {};
 
-        // Завантажуємо збережені ціни або створюємо нові, фіксимо "undefined"
         if (localStorage.getItem('m_costs')) {
             try {
                 let savedCosts = JSON.parse(localStorage.getItem('m_costs'));
@@ -239,6 +238,7 @@
         }
         requestAnimationFrame(countFPS);
 
+        // Повільний таймер пасивного накопичення
         setInterval(() => {
             if (passiveRate > 0 && terraformProgress < 100) {
                 terraformProgress += passiveRate;
@@ -260,11 +260,11 @@
             meteoriteEl.style.display = 'block';
             setTimeout(() => { meteoriteEl.style.display = 'none'; }, 4000);
         }
-        setInterval(spawnMeteorite, 18000 + Math.random() * 10000);
+        setInterval(spawnMeteorite, 22000 + Math.random() * 12000);
 
         function clickMeteorite(e) {
             e.stopPropagation(); playSound('meteor');
-            let bonus = Math.floor(60 + Math.random() * 200); btu += bonus;
+            let bonus = Math.floor(100 + Math.random() * 250); btu += bonus;
             meteoriteEl.style.display = 'none'; saveGame(); updateUI();
         }
 
@@ -281,7 +281,7 @@
             playSound('click');
             if (terraformProgress < 100) {
                 totalTaps++;
-                let tapsNeeded = playerLvl * 20;
+                let tapsNeeded = playerLvl * 25; // Трохи збільшено кількість кліків для рівня
                 if (totalTaps >= tapsNeeded) {
                     playerLvl++; totalTaps = 0; clickPower += 1; playSound('lvlup');
                 }
@@ -297,13 +297,14 @@
         function buyUpgrade(id) {
             if (btu >= upgCosts[id]) {
                 playSound('upgrade'); btu -= upgCosts[id];
-                if (id === 1) { clickPower += 1; passiveRate += 0.02; }
-                if (id === 2) { clickPower += 2; passiveRate += 0.06; }
-                if (id === 3) { clickPower += 4; passiveRate += 0.15; }
-                if (id === 4) { clickPower += 8; passiveRate += 0.40; }
-                if (id === 5) { clickPower += 15; passiveRate += 1.20; }
-                if (id === 6) { clickPower += 40; passiveRate += 4.50; }
-                upgCosts[id] = Math.round(upgCosts[id] * 1.75);
+                // Нові збалансовані уповільнені коефіцієнти прогресу
+                if (id === 1) { clickPower += 1; passiveRate += 0.005; }
+                if (id === 2) { clickPower += 2; passiveRate += 0.015; }
+                if (id === 3) { clickPower += 4; passiveRate += 0.040; }
+                if (id === 4) { clickPower += 6; passiveRate += 0.120; }
+                if (id === 5) { clickPower += 12; passiveRate += 0.350; }
+                if (id === 6) { clickPower += 30; passiveRate += 1.100; }
+                upgCosts[id] = Math.round(upgCosts[id] * 1.85); // Мультиплікатор цін збільшено для хардкорності
                 saveGame(); updateUI(); updatePlanetVisuals();
             }
         }
@@ -319,7 +320,7 @@
             });
 
             scoreEl.innerText = `${btu} BTU`;
-            let tapsNeeded = playerLvl * 20;
+            let tapsNeeded = playerLvl * 25;
             lvlEl.innerText = `${t.lvl} ${playerLvl} (${totalTaps}/${tapsNeeded} ${t.taps})`;
             
             let displayProgress = Math.floor(terraformProgress);
@@ -374,7 +375,7 @@
         function resetGame() {
             if(confirm(i18n[currentLang].confirm)) {
                 localStorage.clear(); btu = 0; terraformProgress = 0; clickPower = 1; passiveRate = 0; isVictoryPlayed = false; totalTaps = 0; playerLvl = 1;
-                upgCosts = { 1: 15, 2: 50, 3: 150, 4: 500, 5: 2000, 6: 10000 };
+                upgCosts = { 1: 25, 2: 100, 3: 400, 4: 1500, 5: 6000, 6: 25000 };
                 saveGame(); updateUI(); updatePlanetVisuals();
             }
         }
