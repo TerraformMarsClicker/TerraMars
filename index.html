@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terraforming Mars Elite</title>
+    <title>Terraforming Mars Elite - Ultra Update 5.1 Fixed</title>
     <style>
         body { 
             margin: 0; 
@@ -13,14 +13,13 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding: 15px 0; 
+            padding: 10px 0; 
             box-sizing: border-box; 
             min-height: 100vh; 
             position: relative; 
             user-select: none;
-            overflow-x: hidden;
+            overflow: hidden;
         }
-        
         body::before {
             content: "";
             position: absolute;
@@ -30,75 +29,66 @@
                 radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
             background-size: 550px 550px, 350px 350px;
             background-position: 0 0, 40px 60px;
-            opacity: 0.4;
-            z-index: 1;
-            pointer-events: none;
+            opacity: 0.4; z-index: 1; pointer-events: none;
         }
-        
-        .top-panel { width: 90%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; z-index: 100; }
-        .fps-counter { background: rgba(0, 0, 0, 0.6); color: #00ffcc; font-family: monospace; font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 1px solid #1e293b; pointer-events: none; box-shadow: 0 0 10px rgba(0,255,204,0.1); }
+        .top-panel { width: 90%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; z-index: 100; }
+        .fps-counter { background: rgba(0, 0, 0, 0.6); color: #00ffcc; font-family: monospace; font-size: 11px; padding: 4px 8px; border-radius: 6px; border: 1px solid #1e293b; pointer-events: none; }
         .lang-switch { display: flex; gap: 4px; }
-        .lang-btn { background: rgba(21, 21, 37, 0.7); border: 1px solid #2d3748; color: #a0aec0; padding: 4px 7px; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.2s; font-weight: bold; }
-        .lang-btn.active { background: #00ffcc; color: #020208; border-color: #00ffcc; box-shadow: 0 0 12px rgba(0,255,204,0.4); }
-        
-        .header { text-align: center; margin-bottom: 5px; z-index: 10; }
-        h2 { margin: 0; color: #ff6347; font-size: 22px; text-shadow: 0 0 15px rgba(255,99,71,0.3); letter-spacing: 0.5px; }
-        .score { font-size: 20px; margin-top: 3px; color: #00ffcc; font-weight: bold; text-shadow: 0 0 10px rgba(0,255,204,0.2); }
-        
-        .space { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; margin-bottom: 10px; z-index: 10; }
-        
+        .lang-btn { background: rgba(21, 21, 37, 0.7); border: 1px solid #2d3748; color: #a0aec0; padding: 4px 6px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .lang-btn.active { background: #00ffcc; color: #020208; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.4); }
+        .header { text-align: center; margin-bottom: 2px; z-index: 10; }
+        h2 { margin: 0; color: #ff6347; font-size: 20px; text-shadow: 0 0 15px rgba(255,99,71,0.3); }
+        .score { font-size: 22px; margin-top: 1px; color: #00ffcc; font-weight: bold; }
+        .player-level { font-size: 11px; color: #ffb703; margin-top: 1px; font-weight: bold; }
+        .space { position: relative; width: 190px; height: 190px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; margin-bottom: 2px; z-index: 10; }
+        @keyframes rotateMars { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .mars-container { width: 145px; height: 145px; transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .mars-container:active { transform: scale(0.92); }
         .mars { 
-            position: absolute; 
-            width: 155px; 
-            height: 155px; 
-            border-radius: 50%; 
-            background: linear-gradient(135deg, #cc4422 0%, #882208 70%, #220500 100%); 
-            box-shadow: 0 0 30px rgba(204,68,34,0.4); 
-            transition: background 1.2s ease, box-shadow 1.2s ease, transform 0.1s ease; 
-            overflow: hidden; 
+            width: 100%; height: 100%; border-radius: 50%; 
+            background: linear-gradient(135deg, #cc4422 0%, #882208 60%, #1a0400 100%); 
+            box-shadow: 0 0 25px rgba(204,68,34,0.5), inset -15px -15px 30px rgba(0,0,0,0.9), inset 10px 10px 20px rgba(255,255,255,0.1); 
+            transition: background 1.2s ease, box-shadow 1.2s ease; position: relative; overflow: hidden; animation: rotateMars 50s linear infinite;
         }
         .mars::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: 
-                radial-gradient(circle at 30% 25%, rgba(0,0,0,0.25) 8%, transparent 12%),
-                radial-gradient(circle at 75% 40%, rgba(0,0,0,0.2) 14%, transparent 20%),
-                radial-gradient(circle at 45% 70%, rgba(0,0,0,0.3) 18%, transparent 25%),
-                radial-gradient(circle at 15% 60%, rgba(0,0,0,0.15) 10%, transparent 15%),
-                linear-gradient(to bottom, transparent 10%, rgba(0,0,0,0.3) 90%);
-            opacity: 0.6;
-            mix-blend-mode: multiply;
+                radial-gradient(circle at 25% 30%, rgba(0,0,0,0.35) 10%, transparent 15%),
+                radial-gradient(circle at 70% 35%, rgba(0,0,0,0.3) 12%, transparent 18%),
+                radial-gradient(circle at 45% 65%, rgba(0,0,0,0.4) 15%, transparent 22%),
+                radial-gradient(circle at 80% 70%, rgba(0,0,0,0.25) 8%, transparent 14%),
+                radial-gradient(circle at 15% 60%, rgba(0,0,0,0.3) 9%, transparent 15%),
+                linear-gradient(45deg, transparent 40%, rgba(0,0,0,0.4) 50%, transparent 60%);
+            opacity: 0.75; mix-blend-mode: multiply;
         }
-        .mars::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15) 0%, transparent 60%, rgba(0,0,0,0.7) 90%);
-        }
-        .mars:active { transform: scale(0.96); }
-        
-        .comet-effect { position: absolute; width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #00ffff; animation: implode 0.4s ease-out forwards; pointer-events: none; }
-        @keyframes implode { 0% { transform: scale(2.5); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
-
-        .controls { width: 88%; max-width: 360px; display: flex; flex-direction: column; gap: 8px; z-index: 10; }
-        
-        .progress-bar-container { background: rgba(10, 10, 20, 0.8); border: 1px solid #2d3748; height: 16px; border-radius: 8px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+        .mars::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 65%, rgba(0,0,0,0.85) 95%); }
+        .comet-effect { position: absolute; width: 8px; height: 8px; background: #fff; border-radius: 50%; box-shadow: 0 0 10px #00ffff; animation: implode 0.3s ease-out forwards; pointer-events: none; }
+        @keyframes implode { 0% { transform: scale(2); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
+        .meteorite { position: absolute; width: 22px; height: 22px; background: radial-gradient(circle at 30% 30%, #ffb703, #fb8500); border-radius: 50%; box-shadow: 0 0 15px #ffb703, -8px -4px 12px #ff0000; cursor: pointer; z-index: 50; display: none; -webkit-tap-highlight-color: transparent; }
+        .controls { width: 90%; max-width: 360px; display: flex; flex-direction: column; gap: 5px; z-index: 10; }
+        .progress-bar-container { background: rgba(10, 10, 20, 0.8); border: 1px solid #2d3748; height: 14px; border-radius: 7px; overflow: hidden; position: relative; margin-bottom: 2px; }
         .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff5533, #3a7d7a, #00ffcc, #00ff66); transition: width 0.4s ease-out; }
-        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 11px; line-height: 16px; font-weight: bold; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-
-        .btn { background: rgba(20, 24, 45, 0.85); border: 1px solid #2e3856; padding: 10px 14px; border-radius: 10px; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; font-size: 13px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .btn:hover:not(:disabled) { border-color: #4d6199; background: rgba(28, 34, 64, 0.9); }
-        .btn:active { transform: scale(0.98); }
-        .btn:disabled { background: rgba(10, 10, 18, 0.6); color: #4a5568; border-color: #1a202c; cursor: not-allowed; box-shadow: none; }
-        .btn .cost { color: #00ffcc; font-weight: bold; text-shadow: 0 0 5px rgba(0,255,204,0.2); }
-        
-        .reset-btn { background: none; border: none; color: #4a5568; font-size: 11px; cursor: pointer; text-decoration: underline; margin-top: 4px; transition: color 0.2s; }
-        .reset-btn:hover { color: #a0aec0; }
+        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 10px; line-height: 14px; font-weight: bold; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .btn { background: rgba(14, 14, 26, 0.85); border: 1px solid #242b42; padding: 8px 12px; border-radius: 9px; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease; font-size: 12px; }
+        .btn.available-upg1 { border-color: #9d4edd; box-shadow: 0 0 8px rgba(157, 78, 221, 0.25); }
+        .btn.available-upg1:active { background: #9d4edd; color: #fff; }
+        .btn.available-upg2 { border-color: #00b4d8; box-shadow: 0 0 8px rgba(0, 180, 216, 0.25); }
+        .btn.available-upg2:active { background: #00b4d8; color: #fff; }
+        .btn.available-upg3 { border-color: #52b788; box-shadow: 0 0 8px rgba(82, 183, 136, 0.25); }
+        .btn.available-upg3:active { background: #52b788; color: #fff; }
+        .btn.available-upg4 { border-color: #4361ee; box-shadow: 0 0 8px rgba(67, 97, 238, 0.25); }
+        .btn.available-upg4:active { background: #4361ee; color: #fff; }
+        .btn.available-upg5 { border-color: #ffb703; box-shadow: 0 0 8px rgba(255, 183, 3, 0.25); }
+        .btn.available-upg5:active { background: #ffb703; color: #000; }
+        .btn.available-upg6 { border-color: #ff4d6d; box-shadow: 0 0 8px rgba(255, 77, 109, 0.25); }
+        .btn.available-upg6:active { background: #ff4d6d; color: #fff; }
+        .btn:disabled { background: rgba(18, 18, 24, 0.65) !important; color: #4a5568 !important; border-color: #161622 !important; box-shadow: none !important; cursor: not-allowed; }
+        .btn .cost { color: #00ffcc; font-weight: bold; }
+        .btn:disabled .cost { color: #4a5568; }
+        .reset-btn { background: none; border: none; color: #4a5568; font-size: 11px; cursor: pointer; text-decoration: underline; margin-top: 2px; }
     </style>
 </head>
 <body>
-
     <div class="top-panel">
         <div class="fps-counter" id="fps">FPS: --</div>
         <div class="lang-switch">
@@ -108,59 +98,55 @@
             <button class="lang-btn" id="lang-ru" onclick="changeLang('ru')">RU</button>
         </div>
     </div>
-
     <div class="header">
         <h2 id="game-title">Тераформування Марса</h2>
         <div class="score" id="score">0 BTU</div>
+        <div class="player-level" id="player-level">LVL 1 (0/20 Taps)</div>
     </div>
-
-    <div class="space" id="space" onclick="clickMars(event)">
-        <div class="mars" id="mars"></div>
+    <div class="space" id="space">
+        <div class="mars-container" onclick="clickMars(event)">
+            <div class="mars" id="mars"></div>
+        </div>
+        <div class="meteorite" id="meteorite" onclick="clickMeteorite(event)"></div>
     </div>
-
     <div class="controls">
         <div class="progress-bar-container">
             <div class="progress-bar" id="progressBar"></div>
             <div class="progress-text" id="progressText">Придатність: 0%</div>
         </div>
-
-        <button class="btn" id="upg1" onclick="buyUpgrade(1)" disabled>
-            <span id="upg1-text">🧲 Магнітний щит</span>
-            <span class="cost" id="cost1">15 BTU</span>
-        </button>
-        <button class="btn" id="upg2" onclick="buyUpgrade(2)" disabled>
-            <span>🏭 <span id="upg2-text">Фаб-заводи атмосфери</span></span>
-            <span class="cost" id="cost2">50 BTU</span>
-        </button>
-        <button class="btn" id="upg3" onclick="buyUpgrade(3)" disabled>
-            <span id="upg3-text">🌱 Посів земного моху</span>
-            <span class="cost" id="cost3">150 BTU</span>
-        </button>
-        
+        <button class="btn" id="upg1" onclick="buyUpgrade(1)" disabled><span id="upg1-text">🧲 Магнітний щит</span><span class="cost" id="cost1">15 BTU</span></button>
+        <button class="btn" id="upg2" onclick="buyUpgrade(2)" disabled><span>🏭 <span id="upg2-text">Фаб-заводы атмосфери</span></span><span class="cost" id="cost2">50 BTU</span></button>
+        <button class="btn" id="upg3" onclick="buyUpgrade(3)" disabled><span id="upg3-text">🌱 Посів земного моху</span><span class="cost" id="cost3">150 BTU</span></button>
+        <button class="btn" id="upg4" onclick="buyUpgrade(4)" disabled><span id="upg4-text">🌊 Доставка крижаних комет</span><span class="cost" id="cost4">500 BTU</span></button>
+        <button class="btn" id="upg5" onclick="buyUpgrade(5)" disabled><span id="upg5-text">🛰️ Орбітальні дзеркала</span><span class="cost" id="cost5">2000 BTU</span></button>
+        <button class="btn" id="upg6" onclick="buyUpgrade(6)" disabled><span id="upg6-text">🧬 Біокуполи ШІ</span><span class="cost" id="cost6">10000 BTU</span></button>
         <center><button class="reset-btn" id="reset-text" onclick="resetGame()">Почати заново 🔄</button></center>
     </div>
-
-    <script>
+        <script>
         const i18n = {
             ua: {
                 title: "Тераформування Марса", progress: "Придатність", done: "Марс повністю тераформовано! 🌍",
                 upg1: "🧲 Магнітний щит", upg2: "Фаб-заводи атмосфери", upg3: "🌱 Посів земного моху",
-                reset: "Почати заново 🔄", confirm: "Скинути прогрес гри?"
+                upg4: "🌊 Доставка крижаних комет", upg5: "🛰️ Орбітальні дзеркала", upg6: "🧬 Біокуполи ШІ",
+                reset: "Почати заново 🔄", confirm: "Скинути прогрес?", lvl: "РІВЕНЬ", taps: "кліків"
             },
             en: {
                 title: "Terraforming Mars", progress: "Habitability", done: "Mars fully Terraformed! 🌍",
                 upg1: "🧲 Magnetic Shield", upg2: "Atmosphere Factories", upg3: "🌱 Earth Moss Seeding",
-                reset: "Reset Game 🔄", confirm: "Reset game progress?"
+                upg4: "🌊 Ice Comet Delivery", upg5: "🛰️ Orbital Mirrors", upg6: "🧬 AI Biospheres",
+                reset: "Reset Game 🔄", confirm: "Reset progress?", lvl: "LEVEL", taps: "taps"
             },
             es: {
-                title: "Terraformación de Marte", progress: "Habitabilidad", done: "¡Marte totalmente terraformado! 🌍",
-                upg1: "🧲 Escudo Magnético", upg2: "Fábricas de Atmósfera", upg3: "🌱 Siembra de Musgo Terrestre",
-                reset: "Reiniciar Juego 🔄", confirm: "¿Restablecer el progreso del juego?"
+                title: "Terraformación de Marte", progress: "Habitabilidad", done: "¡Marte terraformado! 🌍",
+                upg1: "🧲 Escudo Magnético", upg2: "Fábricas de Atmósfera", upg3: "🌱 Musgo Terrestre",
+                upg4: "🌊 Cometas de Hielo", upg5: "🛰️ Espejos Orbitales", upg6: "🧬 Biosferas de IA",
+                reset: "Reiniciar Juego 🔄", confirm: "¿Restablecer progreso?", lvl: "NIVEL", taps: "clics"
             },
             ru: {
                 title: "Терраформирование Марса", progress: "Пригодность", done: "Марс полностью терраформирован! 🌍",
                 upg1: "🧲 Магнитный щит", upg2: "Фаб-заводы атмосферы", upg3: "🌱 Посев земного мха",
-                reset: "Начать заново 🔄", confirm: "Сбросить прогресс игры?"
+                upg4: "🌊 Доставка ледяных комет", upg5: "🛰️ Орбитальные зеркала", upg6: "🧬 Биокупола ИИ",
+                reset: "Начать заново 🔄", confirm: "Сбросить прогресс?", lvl: "УРОВЕНЬ", taps: "кликов"
             }
         };
 
@@ -170,10 +156,25 @@
         let clickPower = Number(localStorage.getItem('m_pow')) || 1;
         let passiveRate = Number(localStorage.getItem('m_rate')) || 0;
         let isVictoryPlayed = localStorage.getItem('m_vic') === 'true';
+        let totalTaps = Number(localStorage.getItem('m_total_taps')) || 0;
+        let playerLvl = Number(localStorage.getItem('m_player_lvl')) || 1;
 
-        let upgCosts = { 1: 15, 2: 50, 3: 150 };
+        // Базові дефолтні ціни для ВСІХ 6 кнопок
+        let defaultCosts = { 1: 15, 2: 50, 3: 150, 4: 500, 5: 2000, 6: 10000 };
+        let upgCosts = {};
+
+        // Завантажуємо збережені ціни або створюємо нові, фіксимо "undefined"
         if (localStorage.getItem('m_costs')) {
-            upgCosts = JSON.parse(localStorage.getItem('m_costs'));
+            try {
+                let savedCosts = JSON.parse(localStorage.getItem('m_costs'));
+                for (let id = 1; id <= 6; id++) {
+                    upgCosts[id] = savedCosts[id] ? Number(savedCosts[id]) : defaultCosts[id];
+                }
+            } catch(e) {
+                upgCosts = { ...defaultCosts };
+            }
+        } else {
+            upgCosts = { ...defaultCosts };
         }
 
         const scoreEl = document.getElementById('score');
@@ -181,78 +182,59 @@
         const progressBar = document.getElementById('progressBar');
         const mars = document.getElementById('mars');
         const fpsEl = document.getElementById('fps');
+        const lvlEl = document.getElementById('player-level');
+        const meteoriteEl = document.getElementById('meteorite');
 
-        // ЗВУКОВИЙ РУШІЙ (Web Audio API)
         let audioCtx = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
         function playSound(type) {
             try {
-                initAudio();
-                if (!audioCtx) return;
-
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
+                initAudio(); if (!audioCtx) return;
+                let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
                 let now = audioCtx.currentTime;
 
                 if (type === 'click') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.08);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.08);
-                    osc.start(now);
-                    osc.stop(now + 0.08);
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(450, now + 0.06);
+                    gain.gain.setValueAtTime(0.12, now); gain.gain.linearRampToValueAtTime(0, now + 0.06);
+                    osc.start(now); osc.stop(now + 0.06);
                 } 
                 else if (type === 'upgrade') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(300, now);
-                    osc.frequency.setValueAtTime(450, now + 0.08);
-                    osc.frequency.setValueAtTime(600, now + 0.16);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.25);
-                    osc.start(now);
-                    osc.stop(now + 0.25);
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(280, now);
+                    osc.frequency.setValueAtTime(440, now + 0.07); osc.frequency.setValueAtTime(620, now + 0.14);
+                    gain.gain.setValueAtTime(0.15, now); gain.gain.linearRampToValueAtTime(0, now + 0.22);
+                    osc.start(now); osc.stop(now + 0.22);
                 } 
-                else if (type === 'victory') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, now); // C5
-                    osc.frequency.setValueAtTime(659.25, now + 0.15); // E5
-                    osc.frequency.setValueAtTime(783.99, now + 0.3); // G5
-                    osc.frequency.setValueAtTime(1046.50, now + 0.45); // C6
-                    gain.gain.setValueAtTime(0.25, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.8);
-                    osc.start(now);
-                    osc.stop(now + 0.8);
+                else if (type === 'lvlup') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
+                    gain.gain.setValueAtTime(0.18, now); gain.gain.linearRampToValueAtTime(0, now + 0.25);
+                    osc.start(now); osc.stop(now + 0.25);
                 }
-            } catch (e) {
-                console.log("Аудіо заблоковано браузером до першого кліку");
-            }
+                else if (type === 'meteor') {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(500, now);
+                    osc.frequency.exponentialRampToValueAtTime(250, now + 0.15);
+                    gain.gain.setValueAtTime(0.18, now); gain.gain.linearRampToValueAtTime(0, now + 0.15);
+                    osc.start(now); osc.stop(now + 0.15);
+                }
+                else if (type === 'victory') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(523, now);
+                    osc.frequency.setValueAtTime(659, now + 0.1); osc.frequency.setValueAtTime(784, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.6);
+                    osc.start(now); osc.stop(now + 0.6);
+                }
+            } catch (e) {}
         }
 
-        let lastCalledTime;
-        let fpsQueue = [];
+        let lastCalledTime; let fpsQueue = [];
         function countFPS() {
-            if (!lastCalledTime) {
-                lastCalledTime = performance.now();
-                requestAnimationFrame(countFPS);
-                return;
-            }
-            let delta = (performance.now() - lastCalledTime) / 1000;
-            lastCalledTime = performance.now();
-            let currentFps = Math.round(1 / delta);
-            fpsQueue.push(currentFps);
+            if (!lastCalledTime) { lastCalledTime = performance.now(); requestAnimationFrame(countFPS); return; }
+            let delta = (performance.now() - lastCalledTime) / 1000; lastCalledTime = performance.now();
+            fpsQueue.push(Math.round(1 / delta));
             if (fpsQueue.length > 10) fpsQueue.shift();
-            let averageFps = Math.round(fpsQueue.reduce((a, b) => a + b, 0) / fpsQueue.length);
-            fpsEl.innerText = `FPS: ${averageFps}`;
+            fpsEl.innerText = `FPS: ${Math.round(fpsQueue.reduce((a, b) => a + b, 0) / fpsQueue.length)}`;
             requestAnimationFrame(countFPS);
         }
         requestAnimationFrame(countFPS);
@@ -262,71 +244,74 @@
                 terraformProgress += passiveRate;
                 if (terraformProgress >= 100) {
                     terraformProgress = 100;
-                    if (!isVictoryPlayed) {
-                        playSound('victory');
-                        isVictoryPlayed = true;
-                        localStorage.setItem('m_vic', 'true');
-                    }
+                    if (!isVictoryPlayed) { playSound('victory'); isVictoryPlayed = true; localStorage.setItem('m_vic', 'true'); }
                 }
                 localStorage.setItem('m_prog', terraformProgress);
-                updateUI();
-                updatePlanetVisuals();
+                updateUI(); updatePlanetVisuals();
             }
         }, 1000);
 
-        function saveGame() {
-            localStorage.setItem('m_btu', btu);
-            localStorage.setItem('m_prog', terraformProgress);
-            localStorage.setItem('m_pow', clickPower);
-            localStorage.setItem('m_rate', passiveRate);
-            localStorage.setItem('m_costs', JSON.stringify(upgCosts));
-            localStorage.setItem('m_lang', currentLang);
+        function spawnMeteorite() {
+            if (terraformProgress >= 100) return;
+            let space = document.getElementById('space');
+            let maxX = space.clientWidth - 25; let maxY = space.clientHeight - 25;
+            meteoriteEl.style.left = Math.random() * maxX + 'px';
+            meteoriteEl.style.top = Math.random() * maxY + 'px';
+            meteoriteEl.style.display = 'block';
+            setTimeout(() => { meteoriteEl.style.display = 'none'; }, 4000);
+        }
+        setInterval(spawnMeteorite, 18000 + Math.random() * 10000);
+
+        function clickMeteorite(e) {
+            e.stopPropagation(); playSound('meteor');
+            let bonus = Math.floor(60 + Math.random() * 200); btu += bonus;
+            meteoriteEl.style.display = 'none'; saveGame(); updateUI();
         }
 
-        function changeLang(lang) {
-            initAudio();
-            currentLang = lang;
-            saveGame();
-            updateUI();
+        function saveGame() {
+            localStorage.setItem('m_btu', btu); localStorage.setItem('m_prog', terraformProgress);
+            localStorage.setItem('m_pow', clickPower); localStorage.setItem('m_rate', passiveRate);
+            localStorage.setItem('m_costs', JSON.stringify(upgCosts)); localStorage.setItem('m_lang', currentLang);
+            localStorage.setItem('m_total_taps', totalTaps); localStorage.setItem('m_player_lvl', playerLvl);
         }
+
+        function changeLang(lang) { initAudio(); currentLang = lang; saveGame(); updateUI(); }
 
         function clickMars(e) {
             playSound('click');
+            if (terraformProgress < 100) {
+                totalTaps++;
+                let tapsNeeded = playerLvl * 20;
+                if (totalTaps >= tapsNeeded) {
+                    playerLvl++; totalTaps = 0; clickPower += 1; playSound('lvlup');
+                }
+            }
             btu += clickPower;
-            
-            const space = document.getElementById('space');
-            const rect = space.getBoundingClientRect();
-            const effect = document.createElement('div');
-            effect.className = 'comet-effect';
-            effect.style.left = `${e.clientX - rect.left - 6}px`;
-            effect.style.top = `${e.clientY - rect.top - 6}px`;
-            space.appendChild(effect);
-            setTimeout(() => effect.remove(), 400);
-
-            saveGame();
-            updateUI();
+            const space = document.getElementById('space'); const rect = space.getBoundingClientRect();
+            const effect = document.createElement('div'); effect.className = 'comet-effect';
+            effect.style.left = `${e.clientX - rect.left - 4}px`; effect.style.top = `${e.clientY - rect.top - 4}px`;
+            space.appendChild(effect); setTimeout(() => effect.remove(), 300);
+            saveGame(); updateUI();
         }
 
         function buyUpgrade(id) {
             if (btu >= upgCosts[id]) {
-                playSound('upgrade');
-                btu -= upgCosts[id];
+                playSound('upgrade'); btu -= upgCosts[id];
                 if (id === 1) { clickPower += 1; passiveRate += 0.02; }
                 if (id === 2) { clickPower += 2; passiveRate += 0.06; }
-                if (id === 3) { clickPower += 5; passiveRate += 0.15; }
-                upgCosts[id] = Math.round(upgCosts[id] * 1.7);
-                saveGame();
-                updateUI();
-                updatePlanetVisuals();
+                if (id === 3) { clickPower += 4; passiveRate += 0.15; }
+                if (id === 4) { clickPower += 8; passiveRate += 0.40; }
+                if (id === 5) { clickPower += 15; passiveRate += 1.20; }
+                if (id === 6) { clickPower += 40; passiveRate += 4.50; }
+                upgCosts[id] = Math.round(upgCosts[id] * 1.75);
+                saveGame(); updateUI(); updatePlanetVisuals();
             }
         }
 
         function updateUI() {
             const t = i18n[currentLang];
             document.getElementById('game-title').innerText = t.title;
-            document.getElementById('upg1-text').innerText = t.upg1;
-            document.getElementById('upg2-text').innerText = t.upg2;
-            document.getElementById('upg3-text').innerText = t.upg3;
+            for (let i = 1; i <= 6; i++) document.getElementById(`upg${i}-text`).innerText = t[`upg${i}`];
             document.getElementById('reset-text').innerText = t.reset;
 
             ['ua', 'en', 'es', 'ru'].forEach(lang => {
@@ -334,67 +319,67 @@
             });
 
             scoreEl.innerText = `${btu} BTU`;
+            let tapsNeeded = playerLvl * 20;
+            lvlEl.innerText = `${t.lvl} ${playerLvl} (${totalTaps}/${tapsNeeded} ${t.taps})`;
             
             let displayProgress = Math.floor(terraformProgress);
             if (terraformProgress >= 100) {
-                progressText.innerText = t.done;
-                progressText.style.color = "#00ff66";
+                progressText.innerText = t.done; progressText.style.color = "#00ff66";
             } else {
-                progressText.innerText = `${t.progress}: ${displayProgress}%`;
-                progressText.style.color = "#fff";
+                progressText.innerText = `${t.progress}: ${displayProgress}%`; progressText.style.color = "#fff";
             }
             progressBar.style.width = `${terraformProgress}%`;
 
-            for (let id in upgCosts) {
+            for (let id = 1; id <= 6; id++) {
                 const btn = document.getElementById(`upg${id}`);
                 const costEl = document.getElementById(`cost${id}`);
                 costEl.innerText = `${upgCosts[id]} BTU`;
                 btn.disabled = btu < upgCosts[id] || terraformProgress >= 100;
+                btn.classList.remove(`available-upg${id}`);
+                if (!btn.disabled) btn.classList.add(`available-upg${id}`);
             }
         }
 
         function updatePlanetVisuals() {
             if (terraformProgress <= 12) {
-                mars.style.background = "linear-gradient(135deg, #cc4422 0%, #882208 70%, #220500 100%)";
-                mars.style.boxShadow = "0 0 25px rgba(204, 68, 34, 0.4)";
+                mars.style.background = "linear-gradient(135deg, #cc4422 0%, #882208 60%, #1a0400 100%)";
+                mars.style.boxShadow = "0 0 25px rgba(204, 68, 34, 0.5), inset -15px -15px 30px rgba(0,0,0,0.9)";
             } 
             else if (terraformProgress > 12 && terraformProgress <= 28) {
-                mars.style.background = "linear-gradient(135deg, #d95336 0%, #882208 70%, #1a0400 100%)";
-                mars.style.boxShadow = "0 0 30px rgba(0, 150, 255, 0.45)";
+                mars.style.background = "linear-gradient(135deg, #d95336 0%, #882208 60%, #1a0400 100%)";
+                mars.style.boxShadow = "0 0 30px rgba(0, 150, 255, 0.45), inset -15px -15px 30px rgba(0,0,0,0.85)";
             } 
             else if (terraformProgress > 28 && terraformProgress <= 45) {
                 mars.style.background = "linear-gradient(135deg, #e67359 0%, #a63a24 50%, #405873 90%)";
-                mars.style.boxShadow = "0 0 35px rgba(100, 180, 255, 0.55)";
+                mars.style.boxShadow = "0 0 35px rgba(100, 180, 255, 0.55), inset -15px -15px 30px rgba(0,0,0,0.8)";
             } 
             else if (terraformProgress > 45 && terraformProgress <= 62) {
-                mars.style.background = "linear-gradient(135deg, #b84d33 0%, #4a7599 40%, #22405c 80%, #0d1a26 100%)";
-                mars.style.boxShadow = "0 0 38px rgba(0, 160, 255, 0.65)";
+                mars.style.background = "linear-gradient(135deg, #b84d33 0%, #4a7599 40%, #22405c 80%)";
+                mars.style.boxShadow = "0 0 38px rgba(0, 160, 255, 0.65), inset -15px -15px 30px rgba(0,0,0,0.8)";
             } 
             else if (terraformProgress > 62 && terraformProgress <= 78) {
-                mars.style.background = "linear-gradient(135deg, #8c5842 0%, #3d7a63 30%, #1d4d6b 70%, #091924 100%)";
-                mars.style.boxShadow = "0 0 40px rgba(0, 200, 255, 0.7)";
+                mars.style.background = "linear-gradient(135deg, #8c5842 0%, #3d7a63 30%, #1d4d6b 70%)";
+                mars.style.boxShadow = "0 0 40px rgba(0, 200, 255, 0.7), inset -15px -15px 30px rgba(0,0,0,0.75)";
             } 
             else if (terraformProgress > 78 && terraformProgress < 100) {
-                mars.style.background = "linear-gradient(135deg, #528c5a 0%, #2b6141 40%, #163e54 80%, #05141c 100%)";
-                mars.style.boxShadow = "0 0 42px rgba(50, 255, 150, 0.75)";
+                mars.style.background = "linear-gradient(135deg, #528c5a 0%, #2b6141 40%, #163e54 80%)";
+                mars.style.boxShadow = "0 0 42px rgba(50, 255, 150, 0.75), inset -15px -15px 30px rgba(0,0,0,0.7)";
             } 
             else if (terraformProgress >= 100) {
                 mars.style.background = "linear-gradient(135deg, #4cb050 0%, #8bc34a 35%, #2196f3 70%, #0d1b2a 100%)";
-                mars.style.boxShadow = "0 0 50px rgba(100, 255, 100, 0.9), inset -10px -10px 25px rgba(255, 255, 255, 0.25)";
+                mars.style.boxShadow = "0 0 50px rgba(100, 255, 100, 0.95), inset -10px -10px 25px rgba(255, 255, 255, 0.25)";
             }
         }
 
         function resetGame() {
             if(confirm(i18n[currentLang].confirm)) {
-                localStorage.clear();
-                btu = 0; terraformProgress = 0; clickPower = 1; passiveRate = 0; isVictoryPlayed = false;
-                upgCosts = { 1: 15, 2: 50, 3: 150 };
+                localStorage.clear(); btu = 0; terraformProgress = 0; clickPower = 1; passiveRate = 0; isVictoryPlayed = false; totalTaps = 0; playerLvl = 1;
+                upgCosts = { 1: 15, 2: 50, 3: 150, 4: 500, 5: 2000, 6: 10000 };
                 saveGame(); updateUI(); updatePlanetVisuals();
             }
         }
 
-        updateUI();
-        updatePlanetVisuals();
+        updateUI(); updatePlanetVisuals();
     </script>
 </body>
 </html>
